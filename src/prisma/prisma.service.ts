@@ -5,9 +5,6 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
-    findUnique(arg0: { where: { id: number; }; }) {
-        throw new Error("Method not implemented.");
-    }
     constructor(config: ConfigService) {
         super({
             datasources: {
@@ -16,6 +13,12 @@ export class PrismaService extends PrismaClient {
                 }
             }
         });
+    }
 
+    cleanDb() {
+        return this.$transaction([
+            this.bookmark.deleteMany(),
+            this.user.deleteMany()
+        ])
     }
 }
